@@ -1,0 +1,149 @@
+{% load tags %}
+{% load i18n static %}
+
+<!DOCTYPE html>
+{% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
+<html lang="{{ LANGUAGE_CODE|default:"en-us" }}" {% if LANGUAGE_BIDI %}dir="rtl" {% endif %} class="not-layout-collapsed">
+    <head>
+        <title>Naveen admin</title>
+        <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i,900" rel="stylesheet">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+        <link href="https://unpkg.com/ionicons@4.5.5/dist/css/ionicons.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
+
+        <link rel="stylesheet" type="text/css" href="{% static "css/open-iconic.css" %}">
+        <link rel="stylesheet" type="text/css" href="{% static "css/pe-icon-7-stroke.css" %}">
+
+        <link rel="stylesheet" type="text/css" href="{% block stylesheet %}{% static "admin/css/base.css" %}{% endblock %}">
+
+        <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.css" %}">
+        <link rel="stylesheet" type="text/css" href="{% static "css/appwork.css" %}">
+        <link rel="stylesheet" type="text/css" href="{% static "css/colors.css" %}">
+        <link rel="stylesheet" type="text/css" href="{% static "css/perfect-scrollbar.css" %}">
+        <link rel="stylesheet" type="text/css" href="{% static "css/theme-corporate.css" %}">
+        <link rel="stylesheet" type="text/css" href="{% static "css/uikit.css" %}">
+        <link rel="stylesheet" type="text/css" href="{% static "css/smartwizard.css" %}">
+        <link rel="stylesheet" type="text/css" href="{% static "css/alchemy.css" %}">
+
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+        <script src="{% static "js/popper.js" %}"></script>
+        <script src="{% static "js/bootstrap.js" %}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+        <script src="{% static "js/layout-helpers.js" %}"></script>
+        <script src="{% static "js/material-ripple.js" %}"></script>
+        <script src="{% static "js/pace.js" %}"></script>
+        <script src="{% static "js/perfect-scrollbar.js" %}"></script>
+        <script src="{% static "js/sidenav.js" %}"></script>
+        <script src="{% static "js/theme-settings.js" %}"></script>
+
+        {% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE">{% endblock %}
+    </head>
+
+    <body class="{% if is_popup %}popup {% endif %}{% block bodyclass %}{% endblock %}" data-admin-utc-offset="{% now " Z" %}">
+        <!-- Layout wrapper -->
+        <div class="layout-wrapper layout-2">
+            <div class="layout-inner">
+                {% if user.is_authenticated %}
+                    {% include "alchemy/sidebar-nav.html" %}
+                {% endif %}
+
+                <!-- Layout container -->
+                <div class="layout-container">
+
+                    {% if user.is_authenticated %}
+                        {% block breadcrumbs %}{% endblock %}
+                        {% include "alchemy/header-nav.html" %}
+                    {% endif %}
+
+                    <div class="layout-content">
+                        <div class="container-fluid flex-grow-1 container-p-y">
+                            
+                            {# My custom messages that i want to show users #}
+                            {% block alchemy_quota_messages %}
+                                {% if user.is_authenticated %}
+                                    {% get_quota_messages as limit_warnings %}
+                                        {% if limit_warnings %}
+                                        <ul class="messagelist">
+                                            {% for message in limit_warnings %}
+                                                <li class="warning">{{ message|capfirst }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% endif %}
+                                {% endif %}
+                            {% endblock alchemy_quota_messages %}
+                            
+                            {# Messages from admin need to be displayed #}
+                            {% block messages %}
+                                {% if messages %}
+                                <ul class="messagelist">{% for message in messages %}
+                                    <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message|capfirst }}</li>
+                                    {% endfor %}</ul>
+                                {% endif %}
+                            {% endblock messages %}
+
+                            {# Content title for displaying time for logged in user#}
+                            {% block alchemy_content_title %}
+                                {% if user.is_authenticated %}
+                                    <h4 class="font-weight-bold py-3 mb-4">
+                                        {% if title and 'Select ' not in title and 'Site ' not in title %}{{ title }}{% endif %}
+                                        <div class="text-muted text-tiny mt-1"><small class="font-weight-normal">Today is {% now "F jS, Y @ H:i" %} </small></div>
+                                    </h4>
+                                {% endif %}
+                            {% endblock alchemy_content_title %}
+                            
+                            {# Actual content body of django forms and change lists #}
+                            {% block alchemy_content_body %}
+                                <div class="row">
+
+                                    <div class="
+                                        {% block alchemy_content_body_classes %}
+                                            {% if user.is_authenticated %}
+                                                col-lg-12 extra-padding
+                                            {% else %}
+                                                col-lg-4 login-form
+                                            {% endif %}
+                                                action-button-padding
+                                        {% endblock alchemy_content_body_classes %}"
+                                    >
+                                        {# Content title for displaying time not logged in user#}
+                                        {% if not user.is_authenticated %}
+                                            <h4 class="font-weight-bold py-3 mb-4">
+                                                {% if title %}{{ title }}{% endif %}
+                                                <div class="text-muted text-tiny mt-1"><small class="font-weight-normal">Today is {% now "F jS, Y @ H:i" %} </small></div>
+                                            </h4>
+                                        {% endif %}
+                                        
+                                        {# Actual content block to show #}
+                                        <div class="card mb-4">
+                                            <div class="card-body no-padding">
+
+                                                {% block content %}
+                                                    {% block object-tools %}{% endblock %}
+                                                    {{ content }}
+                                                {% endblock %}
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    {% if user.is_authenticated %}
+                                        {% block alchemy_content_sidebar %}
+                                        {% endblock alchemy_content_sidebar %}
+                                    {% endif %}
+                                </div>
+                            {% endblock alchemy_content_body %}
+
+                        </div>
+                        {% include "alchemy/footer-nav.html" %}
+                    </div>
+            </div>
+                    
+            </div>
+            {% include "alchemy/modules/search_modal.html" %}
+        </div>
+        {% include "alchemy/modules/temporary-fixes.html" %}
+        <script src="{% static "js/alchemy.js" %}"></script>
+    </body>
+</html>

@@ -1,0 +1,50 @@
+{% extends "admin/change_list.html" %}
+
+{% load i18n  admin_list %}
+{% load tags %}
+
+{% block filters %}
+{% endblock %}
+
+{% block alchemy_content_body_classes %}
+    {% if user.is_authenticated %}
+        col-lg-9 extra-padding
+    {% else %}
+        col-lg-4 login-form
+    {% endif %}
+    action-button-padding
+{% endblock alchemy_content_body_classes %}
+
+{% block alchemy_content_sidebar %}
+    <div class="col-lg-3 extra-padding action-button-padding">
+        {% if cl.has_filters %}
+            <div id="changelist-filter">
+
+                {% if cl.filter_specs|length > 0 %}
+                    <h2>{% trans 'By Filters' %}</h2>
+                    <div class="card card-condenced mb-3">
+                        {% for spec in cl.filter_specs %}
+                            <div class="filters-{{ spec.title|slugify }}">
+                            <div class="card-header border-0">
+                                <a class="d-flex justify-content-between text-body" data-toggle="collapse"
+                                    href="#filters-{{ spec.title|slugify }}" aria-expanded="true">
+                                    {{ spec.title }}
+                                    <div class="collapse-icon"></div>
+                                </a>
+                            </div>
+                            <div class="collapse {% if spec.used_parameters|length > 0 %} show used_parameters{% endif %} " id="filters-{{ spec.title|slugify }}">
+                                <div class="card-body pt-1">
+                                    {% admin_list_filter cl spec %}
+                                </div>
+                            </div>
+                            <hr class="m-0">
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+            </div>
+
+        {% endif %}
+    </div>
+{% endblock alchemy_content_sidebar %}

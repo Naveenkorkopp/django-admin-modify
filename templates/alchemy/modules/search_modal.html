@@ -1,0 +1,34 @@
+
+
+<!-- [start] Search Modal -->
+<div class="modal modal-fill-in fade" id="modal-customer-search" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">×</button>
+            <div class="modal-body">
+                <form method="GET" action="/admin/auth/user/">
+                    <p class="text-white text-large font-weight-light mb-3">Customer Search</p>
+                    <div class="input-group input-group-lg mb-3">
+                        <input id="modal-customer-search-field" type="text" name="q" class="form-control bg-white border-0"
+                            placeholder="Email, Name, or MobileApp ID">
+                        <span class="input-group-append">
+                            <button class="btn btn-primary" type="submit">Search</button>
+                        </span>
+                    </div>
+                    <div class="text-center text-right text-white opacity-50">You will be taken to the customer page to view the search results</div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(function() {
+            $('*[data-target="#modal-customer-search"]').click(function() {
+                setTimeout(function() {
+                    $('#modal-customer-search-field').focus();
+                }, 500);
+            });
+        })
+    </script>
+</div>
+<!-- [end] Search Modal -->

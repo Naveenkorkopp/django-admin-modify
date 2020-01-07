@@ -1,0 +1,77 @@
+{% load tags i18n %}
+{% load static %}
+
+{% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE|default:"en-us" }}" class="not-layout-collapsed">
+    <head>
+        <title>Naveen Django Modify</title>
+
+        <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i,900" rel="stylesheet">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+        <link href="https://unpkg.com/ionicons@4.5.5/dist/css/ionicons.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
+
+        <link rel="stylesheet" type="text/css" href="{% static "css/open-iconic.css" %}">
+        <link rel="stylesheet" type="text/css" href="{% static "css/pe-icon-7-stroke.css" %}">
+
+        <link rel="stylesheet" type="text/css" href="{% block stylesheet %}{% static "admin/css/base.css" %}{% endblock %}">
+
+        <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.css" %}">
+        <link rel="stylesheet" type="text/css" href="{% static "css/appwork.css" %}">
+        <link rel="stylesheet" type="text/css" href="{% static "css/colors.css" %}">
+        <link rel="stylesheet" type="text/css" href="{% static "css/perfect-scrollbar.css" %}">
+        <link rel="stylesheet" type="text/css" href="{% static "css/theme-corporate.css" %}">
+        <link rel="stylesheet" type="text/css" href="{% static "css/uikit.css" %}">
+        
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+        <script src="{% static "js/popper.js" %}"></script>
+        <script src="{% static "js/bootstrap.js" %}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.js"></script>
+        
+        <script src="{% static "js/layout-helpers.js" %}"></script>
+        <script src="{% static "js/material-ripple.js" %}"></script>
+        <script src="{% static "js/pace.js" %}"></script>
+        <script src="{% static "js/perfect-scrollbar.js" %}"></script>
+        <script src="{% static "js/sidenav.js" %}"></script>
+        <script src="{% static "js/theme-settings.js" %}"></script>
+
+        {% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE">{% endblock %}
+
+        <link rel="stylesheet" type="text/css" href="{% static "css/alchemy.css" %}">
+
+    </head>
+    <body id="alchemy-login" class="login {% if is_popup %}popup {% endif %}{% block bodyclass %}{% endblock %}" data-admin-utc-offset="{% now " Z" %}">
+        {% block content %}
+            <div class="login-wrapper">
+                <div class="flex-wrapper">
+                    <div class="title-wrapper">
+                        <div class="sprite-container"></div><div class="text-wrapper"><img alt="Alchemy" src="{% static "images/alchemy_text.png" %}" /></div>
+                    </div>
+                    
+                    <form action="/admin/login/?next=/admin/" method="post" id="login-form">
+
+                        {% csrf_token %} 
+
+                        {{ form }}
+
+                        <div class="submit-row">
+                            <input type="submit" value="Log in">
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        {% include "alchemy/footer-nav.html" %}
+        {% endblock %}
+        <script>
+          const alchemyBody = document.getElementById(`alchemy-login`);
+          if(window.localStorage.alchemyVisited == null && alchemyBody) {
+            alchemyBody.classList.add('new-session');
+          }
+          window.localStorage.setItem(`alchemyVisited`, true);
+        </script>
+    </body>
+</html>

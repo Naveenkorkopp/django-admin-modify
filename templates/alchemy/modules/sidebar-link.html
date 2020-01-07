@@ -1,0 +1,10 @@
+{% load tags %}
+
+{% has_view_perm_for_url user url as should_render_link %}
+{% if should_render_link %}
+    <li class="sidenav-item">
+        <a href="{{ url }}" class="sidenav-link {% if url in request.get_full_path %}active{% endif %} ">
+            <div>{{ title }}</div>
+        </a>
+    </li>
+{% endif %}

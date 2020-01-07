@@ -1,0 +1,85 @@
+{% load tags %}
+
+{% load tags %}
+
+{% url 'admin:auth_user_change' user.id as auth_acc_url %}
+{% url 'admin:admin_logentry_changelist' as auth_log_url %}
+
+{% has_view_perm_for_url user auth_acc_url as has_account_perm %}
+{% has_view_perm_for_url user auth_log_url as has_log_perm %}
+
+
+<nav class="layout-navbar navbar navbar-expand-lg align-items-lg-center bg-white container-p-x" id="layout-navbar">
+    <!-- Sidebar Toggle -->
+    <div class="layout-sidenav-toggle navbar-nav d-lg-none align-items-lg-center mr-auto">
+        <i class="ion ion-md-menu text-large align-middle"></i>
+    </div>
+
+    <!-- Breadcrumbs -->
+    <div class="breadcrumbs-placeholder">
+        <script>
+            // Django templating is horrible... (this hack is here because block tags cannot occur inside an included file)
+            (function() {
+                var breadcrumbs = document.querySelector('.breadcrumbs');
+                if (breadcrumbs) {
+                  var html = breadcrumbs.outerHTML.replace(/›/g,'<span class="seperator">/</span>');
+                  breadcrumbs.remove();
+                  document.querySelector('.breadcrumbs-placeholder').outerHTML = html;
+                }
+            })();
+        </script>
+    </div>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#layout-navbar-collapse">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="navbar-collapse collapse" id="layout-navbar-collapse">
+        <hr class="d-lg-none w-100 my-2">
+
+        <div class="navbar-nav align-items-lg-center ml-auto">
+            <div class="demo-navbar-notifications nav-item mr-lg-3">
+                <a class="nav-link hide-arrow" href="" data-toggle="modal" data-target="#modal-customer-search">
+                    <i class="ion ion-md-search navbar-icon align-middle"></i>
+                    <span class="d-lg-none align-middle">&nbsp; Customer Search</span>
+                </a>
+            </div>
+
+            {% if has_log_perm %}
+            <div class="demo-navbar-notifications nav-item mr-lg-3">
+                <a class="nav-link hide-arrow" href="{% url 'admin:admin_logentry_changelist' %}">
+                    <i class="ion ion-md-notifications-outline navbar-icon align-middle"></i>
+                    <span class="badge badge-primary badge-dot indicator"></span>
+                    <span class="d-lg-none align-middle">&nbsp; Notifications</span>
+                </a>
+            </div>
+            {% endif %}
+
+            <div class="nav-item d-none d-lg-block text-big font-weight-light line-height-1 opacity-25 mr-3 ml-1">|</div>
+            <div class="demo-navbar-user nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                    <span class="d-inline-flex flex-lg-row-reverse align-items-center align-middle">
+                        <img src="{{ user|gravatar:50 }}" alt class="d-block ui-w-30 rounded-circle">
+
+                        <span class="px-1 mr-lg-2 ml-2 ml-lg-0">{% firstof user.get_full_name user.get_username %}</span>
+                    </span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right">
+                    {% if has_account_perm %}
+                    <a href="{{ auth_acc_url }}" class="dropdown-item"><i class="ion ion-ios-person text-lightest"></i>
+                        &nbsp; Account settings</a>
+                    {% endif %}
+
+                    {% if has_log_perm %}
+                    <a href="{{ auth_log_url }}" class="dropdown-item"><i class="ion ion-ios-mail text-lightest"></i>
+                        &nbsp; Recent Changes</a>
+                    {% endif %}
+
+                    <div class="dropdown-divider"></div>
+                    <a href="{% url 'admin:logout' %}" class="dropdown-item"><i class="ion ion-ios-log-out text-danger"></i>
+                        &nbsp; Log Out</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>

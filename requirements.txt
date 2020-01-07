@@ -1,0 +1,16 @@
+Django==2.1.11
+django-environ==0.4.4
+mysqlclient==1.3.13
+django-parler==1.9.2
+djangorestframework==3.10.2
+django-extensions==2.1.4
+python-dateutil==2.5.3
+django-admin-multiple-choice-list-filter==0.1.1 
+django-admin-rangefilter==0.3.10
+django-import-export==1.2.0
+django-admin-numeric-filter==0.1.3
+pypostalcode==0.3.4
+emoji==0.5.4
+
+ipdb
+ipython

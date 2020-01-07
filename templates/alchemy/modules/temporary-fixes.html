@@ -1,0 +1,160 @@
+<style>
+    .parler-language-tabs span.available {
+        border-color: #555E61;
+    }
+
+    .parler-language-tabs span.current {
+        background-color: #555E61;
+        border-color: #555E61;
+        color: #fff;
+        border-radius: 0;
+    }
+
+    .parler-language-tabs span.available,
+    .parler-language-tabs span.current,
+    .parler-language-tabs span.empty {
+        border-radius: 0;
+    }
+
+    .parler-language-tabs {
+        border-bottom: 2px solid #F26B55;
+    }
+
+    @media (max-width: 1024px) {
+        #user-tools {
+            text-align: right;
+        }
+
+        .gale-branding {
+            top: 75px;
+            right: 35px;
+        }
+    }
+
+    .dashboard #content {
+        width: initial;
+    }
+
+    .admindatefilter p {
+        font-size: 10px;
+        font-weight: normal;
+    }
+
+    .admindatefilter .controls {
+        text-align: right;
+        margin-right: 15px;
+    }
+
+    .admindatefilter .button,
+    .admindatefilter input[type=submit],
+    .admindatefilter input[type=button],
+    .admindatefilter .submit-row input,
+    .admindatefilter a.button,
+    .admindatefilter .button,
+    .admindatefilter input[type=reset] {
+        background: #adadad;
+        padding: 4px 5px;
+        border-radius: 0;
+        font-size: 10px;
+        text-transform: uppercase;
+        border: none;
+        color: #fff;
+        cursor: pointer;
+    }
+
+    .model-customerpushnotification.change-form input[value="Save and continue editing"],
+    .model-customeremail.change-form input[value="Save and continue editing"] {
+        display: none;
+    }
+
+    .mulitple-choice li a.small i {
+        display: none;
+    }
+    .mulitple-choice li:hover a.small i {
+        display: inline;
+    }
+
+</style>
+
+
+<script>
+    // TODO: fix this properly...
+    document.body.innerHTML = document.body.innerHTML
+    .replace(/Audit_Core/g, 'Audit')
+    .replace(/Clearbridge_Core/g, 'Mobile App')
+    .replace(/Participaction_Core/g, 'Alchemy Loyalty Core')
+    .replace(/Recommendation_Core/g, 'Alchemy Recommendation Core')
+    .replace(/Add Customer Email/g, 'Send Customer Email')
+    .replace(/Add Customer Push Notification/g, 'Send Customer Push Notification');
+
+    // TODO: sort filters properly
+    var li_elems = document.querySelectorAll('#changelist-filter li');
+    [].slice.call(li_elems).sort(function (a, b) {
+        var textA, textB;
+        try {
+            textA = a.querySelector('a').getAttribute('title').toLowerCase()
+            textB = b.querySelector('a').getAttribute('title').toLowerCase()
+        }
+        catch (err) {
+            return -1;
+        }
+        if (textA.match(/^All$/i)) { return -1; }
+        if (textB.match(/^All$/i)) { return 1; }
+
+        if (a.classList && a.classList[0] == 'selected') {
+            return -1;
+        }
+        if (b.classList && b.classList[0] == 'selected') {
+            return -1;
+        }
+
+        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+    }).forEach(function (el) { el.parentNode.appendChild(el) });
+
+    // TODO: fix this properly...
+    var el = document.querySelector('.model-customeremail.change-form input[value="Save"], .model-customerpushnotification.change-form input[value="Save"]');
+    if (el) {
+        el.value = 'Send';
+    }
+    el = document.querySelector('.model-customeremail.change-form input[value="Save and add another"], .model-customerpushnotification.change-form input[value="Save and add another"]');
+    if (el) {
+        el.value = 'Send and create another';
+    }
+
+    // Only show the Import/Export dropdown if the action is export_admin_action
+    var fileFormat = document.querySelector('#changelist-form select[name=file_format]');
+
+    if (fileFormat) {
+      fileFormat.parentNode.style.display = 'none';
+      document.querySelector('#changelist-form select[name=action]').addEventListener('change', function(event) {
+          if (event.currentTarget.value == 'export_admin_action') {
+              fileFormat.parentNode.style.display = 'initial';
+              fileFormat.parentNode.style.paddingLeft = '20px';
+          } else {
+              fileFormat.parentNode.style.display = 'none';
+          }
+      });
+    }
+
+    // Remove extra padding if not required
+    if (document.querySelector('.extra-padding') && !document.querySelector('#changelist-search')) {
+        el = document.querySelector('.extra-padding');
+        el.classList.remove('extra-padding');
+    }
+
+
+    //REMOVE IMPORT EXPORT ACCORDING TO PERMISSIONS
+    const adminContainer = document.querySelector('.sidenav-item.for-admin ul.sidenav-menu');
+    const importLink = document.querySelector('.import_link');
+    const exportLink = document.querySelector('.export_link');
+    if ((importLink || exportLink) && adminContainer && adminContainer.children.length == 0 ) {
+      document.querySelector('.import_link').style.display = 'none';
+      document.querySelector('.export_link').style.display = 'none';
+    }
+
+    $(function() {
+        $("a:contains('(include)')").each(function() { this.innerHTML = '<i class="oi oi-pin" style="opacity:0.5;margin-left:4px;font-size:120%;"></i>'; })
+        $("a:contains('(exclude)')").each(function() { this.innerHTML = '<i class="oi oi-delete" style="opacity:0.5;margin-left:4px;font-size:120%;"></i>'; })
+    });
+</script>
+
